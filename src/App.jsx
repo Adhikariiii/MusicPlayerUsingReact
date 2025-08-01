@@ -23,6 +23,7 @@ export default function App() {
   const [duration, setDuration] = useState(0);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [visible, setVisible] = useState(false);
+  const [playlist, setPlaylist] = useState(audio);
   const audioRef = useRef(null);
 
   const toggle = () => {
@@ -36,29 +37,49 @@ export default function App() {
   };
 
   const handleNext = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % audio.length);
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % playlist.length);
   };
 
   const handlePrevious = () => {
     setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? audio.length - 1 : prevIndex - 1
+      prevIndex === 0 ? playlist.length - 1 : prevIndex - 1
     );
   };
   const togglePlayList = () => {
     setVisible(!visible);
   };
-
+  const onHandleAdd = (e) => {
+    const files = Array.from(e.target.files);
+    const newSongs = files.map((file) => ({
+      title: file.name,
+      src: URL.createObjectURL(file),
+      img: "default",
+    }));
+    setPlaylist((prevPlaylist) => [...prevPlaylist, ...newSongs]);
+  };
   return (
     <>
+      <Typography variant="h2" color="secondary" align="center">
+        Music Player
+      </Typography>
+      <Typography variant="h4">
+        You're currently Playing {playlist.title}
+      </Typography>
       <div className="container">
         <div className="musicPlayer">
-          <Typography variant="h2">Music Player</Typography>
-          <Card>
+          <Card className="card">
             {/* <img src="fjalsd" alt="photo" /> */}
             <br />
-            <Typography>{audio[currentIndex].title}</Typography>
+            <Typography
+              variant="h6"
+              color="textSecondary"
+              alignContent={"center"}
+              m={2}
+            >
+              {playlist[currentIndex].title}
+            </Typography>
             <audio
-              src={audio[currentIndex].src}
+              src={playlist[currentIndex].src}
               ref={audioRef}
               onTimeUpdate={(e) => {
                 setCurrentTime(e.target.currentTime);
@@ -94,21 +115,33 @@ export default function App() {
           </Card>
         </div>
         <div className="playlist">
-          <Button onClick={togglePlayList}>
+          <Button onClick={togglePlayList} variant="contained">
             {visible ? "Hide Playlist" : "Show Playlist"}
           </Button>
           {visible && (
             <Paper elevation={8} variant="outlined">
-              {audio.map((songs, index) => {
+              {playlist.map((songs, index) => {
                 return (
                   <div className="songList" key={index}>
-                    {songs.title}
+                    <a href="#"> {songs.title}</a>
                     <br></br>
                   </div>
                 );
               })}
             </Paper>
           )}
+        </div>
+        <div className="addsongs">
+          <input
+            type="file"
+            className="input_add"
+            accept="audio/*"
+            multiple
+            onChange={onHandleAdd}
+          />
+          <Button variant="contained" color="success">
+            Add Songs
+          </Button>
         </div>
       </div>
     </>

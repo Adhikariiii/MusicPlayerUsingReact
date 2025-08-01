@@ -1,15 +1,31 @@
 body {
   background-color: rgb(191, 182, 182);
 }
+.card {
+  height: auto;
+  width: auto;
+}
+
 .controllers {
   margin: 1rem;
 }
-.container {
-  display: flex;
-  gap: 9rem;
-  margin: 20%;
-}
+
 .playlist {
   padding: 2rem;
   font-size: 1.5rem;
+}
+.songList {
+  padding: 9px;
+}
+.songList a {
+  text-decoration: none;
+  color: rgb(81, 80, 80);
+}
+.songList a:hover {
+  text-decoration: none;
+  background-color: rgba(44, 44, 133, 0.798);
+  color: whitesmoke;
+  padding: 3px;
+  width: 100%;
+  border-radius: 4px;
 }
